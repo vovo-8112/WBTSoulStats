@@ -1,7 +1,7 @@
 {
   "name": "WBTSoulStats",
   "short_name": "SoulStats",
-  "start_url": "/",
+  "start_url": "/WBTSoulStats/",
   "display": "standalone",
   "background_color": "#0175C2",
   "theme_color": "#0175C2",
