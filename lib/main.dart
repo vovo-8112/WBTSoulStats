@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:intl/intl.dart';
-
+import 'package:shared_preferences/shared_preferences.dart';
+import 'web_local_storage.dart' if (dart.library.io) 'noop.dart';
 void main() {
   runApp(const SoulApp());
 }
@@ -82,10 +84,39 @@ class _SoulHomePageState extends State<SoulHomePage> {
     }
   }
 
+  Future<void> saveSoulId(String soulId) async {
+    if (kIsWeb) {
+      setItem('saved_soul_id', soulId);
+      return;
+    }
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setString('saved_soul_id', soulId);
+    } catch (_) {}
+  }
+
+  Future<void> loadSavedSoulId() async {
+    if (kIsWeb) {
+      final savedId = getItem('saved_soul_id') ?? "21187";
+      _controller.text = savedId;
+      fetchSoulData(savedId);
+      return;
+    }
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final savedId = prefs.getString('saved_soul_id') ?? "21187";
+      _controller.text = savedId;
+      fetchSoulData(savedId);
+    } catch (_) {
+      _controller.text = "21187";
+      fetchSoulData("21187");
+    }
+  }
+
   @override
   void initState() {
     super.initState();
-    fetchSoulData(_controller.text);
+    loadSavedSoulId();
   }
 
   Widget buildCard(String title, String value) {
@@ -131,6 +162,7 @@ class _SoulHomePageState extends State<SoulHomePage> {
                     ElevatedButton(
                       onPressed: () {
                         FocusScope.of(context).unfocus();
+                        saveSoulId(_controller.text);
                         fetchSoulData(_controller.text);
                       },
                       child: const Text('Load'),
