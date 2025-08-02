@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'web_local_storage.dart' if (dart.library.io) 'noop.dart';
 void main() {
   runApp(const SoulApp());
@@ -113,6 +114,17 @@ class _SoulHomePageState extends State<SoulHomePage> {
     }
   }
 
+  void openUrl(String url) async {
+    final uri = Uri.parse(url);
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri);
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('❌ Cannot open $url')),
+      );
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -166,6 +178,23 @@ class _SoulHomePageState extends State<SoulHomePage> {
                         fetchSoulData(_controller.text);
                       },
                       child: const Text('Load'),
+                    ),
+                    const SizedBox(width: 10),
+                    ElevatedButton(
+                      onPressed: () {
+                        final soulId = _controller.text;
+                        final url = 'https://explorer.whitechain.io/soul/$soulId';
+                        openUrl(url);
+                      },
+                      child: const Text('Explorer'),
+                    ),
+                    const SizedBox(width: 10),
+                    ElevatedButton(
+                      onPressed: () {
+                        const claimUrl = 'https://explorer.whitechain.io/address/0x0000000000000000000000000000000000001001/contract/write#claim';
+                        openUrl(claimUrl);
+                      },
+                      child: const Text('Claim'),
                     ),
                   ],
                 ),
