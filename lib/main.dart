@@ -158,19 +158,18 @@ class _SoulHomePageState extends State<SoulHomePage> {
             children: [
               Padding(
                 padding: const EdgeInsets.all(16),
-                child: Row(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    Expanded(
-                      child: TextField(
-                        controller: _controller,
-                        keyboardType: TextInputType.number,
-                        decoration: const InputDecoration(
-                          labelText: 'Soul ID',
-                          border: OutlineInputBorder(),
-                        ),
+                    TextField(
+                      controller: _controller,
+                      keyboardType: TextInputType.number,
+                      decoration: const InputDecoration(
+                        labelText: 'Soul ID',
+                        border: OutlineInputBorder(),
                       ),
                     ),
-                    const SizedBox(width: 10),
+                    const SizedBox(height: 10),
                     ElevatedButton(
                       onPressed: () {
                         FocusScope.of(context).unfocus();
@@ -179,7 +178,7 @@ class _SoulHomePageState extends State<SoulHomePage> {
                       },
                       child: const Text('Load'),
                     ),
-                    const SizedBox(width: 10),
+                    const SizedBox(height: 10),
                     ElevatedButton(
                       onPressed: () {
                         final soulId = _controller.text;
@@ -188,7 +187,7 @@ class _SoulHomePageState extends State<SoulHomePage> {
                       },
                       child: const Text('Explorer'),
                     ),
-                    const SizedBox(width: 10),
+                    const SizedBox(height: 10),
                     ElevatedButton(
                       onPressed: () {
                         const claimUrl = 'https://explorer.whitechain.io/address/0x0000000000000000000000000000000000001001/contract/write#claim';
