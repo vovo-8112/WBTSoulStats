@@ -1,9 +1,10 @@
 name: Deploy Flutter Web to GitHub Pages
 
 on:
-  push:
-    branches:
-      - main   # деплоїмо при пуші в main
+  workflow_dispatch:   # запускається тільки вручну
+
+permissions:
+  contents: write   # <-- дозволяє пуш у гілку
 
 jobs:
   build_and_deploy:
